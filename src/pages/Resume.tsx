@@ -1,9 +1,12 @@
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { Download, Mail, MapPin, Phone } from "lucide-react";
+import { toast } from "sonner";
 
 const Resume = () => {
+  const resumeRef = useRef<HTMLDivElement>(null);
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -70,120 +73,147 @@ const Resume = () => {
     { category: "Soft Skills", items: ["Problem Solving", "Team Collaboration", "Project Management", "Communication", "Agile Methodologies"] }
   ];
 
+  const handleDownload = () => {
+    // In a real implementation, you would generate a PDF here
+    // For now, we'll just show a toast notification
+    toast.success("Resume download started");
+    
+    // Example of how you might implement actual PDF printing
+    // window.print();
+    
+    console.log("Download resume");
+  };
+
   return (
-    <div className="min-h-screen pt-28 pb-16 px-6">
-      <div className="container mx-auto max-w-4xl">
-        <div className="flex justify-between items-start mb-12 flex-col sm:flex-row gap-4">
+    <div className="pt-28 pb-16 px-6 flex flex-col items-center min-h-screen">
+      <div className="container max-w-4xl mx-auto mb-8">
+        <div className="flex justify-between items-start mb-8 flex-col sm:flex-row gap-4">
           <AnimatedSection>
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Resume</h1>
           </AnimatedSection>
           
           <AnimatedSection delay={100}>
-            <a 
-              href="#" 
+            <button 
               className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-              onClick={(e) => {
-                e.preventDefault();
-                // Logic for downloading resume PDF would go here
-                console.log("Download resume");
-              }}
+              onClick={handleDownload}
             >
               <Download size={16} />
               Download PDF
-            </a>
+            </button>
           </AnimatedSection>
         </div>
+      </div>
 
-        {/* Personal Information */}
-        <AnimatedSection delay={200} className="mb-12">
-          <div className="glass rounded-xl p-8 shadow-sm border border-border/40">
-            <h2 className="text-3xl font-bold mb-4">{personalInfo.name}</h2>
-            <h3 className="text-xl text-primary mb-4">{personalInfo.title}</h3>
-            
-            <p className="text-muted-foreground mb-6">{personalInfo.bio}</p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="flex items-center gap-2">
-                <Mail size={16} className="text-primary" />
-                <span>{personalInfo.email}</span>
+      {/* A4 Resume Sheet */}
+      <AnimatedSection delay={200} className="w-full max-w-[210mm] mx-auto">
+        <div 
+          ref={resumeRef}
+          className="bg-white text-black shadow-lg rounded-lg overflow-hidden border border-gray-200"
+          style={{
+            width: "210mm",
+            minHeight: "297mm",
+            maxWidth: "100%",
+            boxSizing: "border-box"
+          }}
+        >
+          {/* Resume Content */}
+          <div className="p-8 md:p-12">
+            {/* Header / Personal Info */}
+            <div className="border-b border-gray-200 pb-6 mb-6">
+              <h2 className="text-3xl font-bold text-gray-900">{personalInfo.name}</h2>
+              <h3 className="text-xl text-primary mb-4">{personalInfo.title}</h3>
+              
+              <p className="text-gray-700 mb-6">{personalInfo.bio}</p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-700">
+                <div className="flex items-center gap-2">
+                  <Mail size={16} className="text-primary" />
+                  <span>{personalInfo.email}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Phone size={16} className="text-primary" />
+                  <span>{personalInfo.phone}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin size={16} className="text-primary" />
+                  <span>{personalInfo.location}</span>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <Phone size={16} className="text-primary" />
-                <span>{personalInfo.phone}</span>
+            </div>
+
+            {/* Work Experience */}
+            <div className="mb-6">
+              <h2 className="text-xl font-bold mb-4 pb-1 border-b border-gray-200 text-gray-900">
+                Work Experience
+              </h2>
+              
+              <div className="space-y-6">
+                {experience.map((job, index) => (
+                  <div key={index} className="pl-0">
+                    <h3 className="text-lg font-semibold text-gray-900">{job.position}</h3>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-primary mb-2">
+                      <span className="text-gray-800">{job.company}</span>
+                      <span className="hidden sm:inline text-gray-500">•</span>
+                      <span className="text-gray-500">{job.period}</span>
+                    </div>
+                    <ul className="list-disc list-outside ml-5 text-gray-700 text-sm">
+                      {job.responsibilities.map((item, i) => (
+                        <li key={i} className="mb-1">{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
               </div>
-              <div className="flex items-center gap-2">
-                <MapPin size={16} className="text-primary" />
-                <span>{personalInfo.location}</span>
+            </div>
+
+            {/* Education */}
+            <div className="mb-6">
+              <h2 className="text-xl font-bold mb-4 pb-1 border-b border-gray-200 text-gray-900">
+                Education
+              </h2>
+              
+              <div className="space-y-4">
+                {education.map((edu, index) => (
+                  <div key={index} className="pl-0">
+                    <h3 className="text-lg font-semibold text-gray-900">{edu.degree}</h3>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-gray-800 mb-2">
+                      <span>{edu.institution}</span>
+                      <span className="hidden sm:inline text-gray-500">•</span>
+                      <span className="text-gray-500">{edu.period}</span>
+                    </div>
+                    <p className="text-gray-700 text-sm">{edu.details}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Skills */}
+            <div>
+              <h2 className="text-xl font-bold mb-4 pb-1 border-b border-gray-200 text-gray-900">
+                Skills
+              </h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {skills.map((skillGroup, index) => (
+                  <div key={index}>
+                    <h3 className="text-base font-semibold mb-2 text-gray-900">{skillGroup.category}</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {skillGroup.items.map((skill, i) => (
+                        <span 
+                          key={i} 
+                          className="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800 border border-gray-200"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-        </AnimatedSection>
-
-        {/* Work Experience */}
-        <AnimatedSection delay={300} className="mb-12">
-          <h2 className="text-2xl font-bold mb-6 pb-2 border-b">Work Experience</h2>
-          
-          <div className="space-y-8">
-            {experience.map((job, index) => (
-              <div key={index} className="ml-2 pl-6 border-l-2 border-muted">
-                <h3 className="text-xl font-semibold">{job.position}</h3>
-                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-primary mb-2">
-                  <span>{job.company}</span>
-                  <span className="hidden sm:inline text-muted-foreground">•</span>
-                  <span className="text-muted-foreground">{job.period}</span>
-                </div>
-                <ul className="list-disc list-outside ml-4 text-muted-foreground">
-                  {job.responsibilities.map((item, i) => (
-                    <li key={i} className="mb-1">{item}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </AnimatedSection>
-
-        {/* Education */}
-        <AnimatedSection delay={400} className="mb-12">
-          <h2 className="text-2xl font-bold mb-6 pb-2 border-b">Education</h2>
-          
-          <div className="space-y-6">
-            {education.map((edu, index) => (
-              <div key={index} className="ml-2 pl-6 border-l-2 border-muted">
-                <h3 className="text-xl font-semibold">{edu.degree}</h3>
-                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-primary mb-2">
-                  <span>{edu.institution}</span>
-                  <span className="hidden sm:inline text-muted-foreground">•</span>
-                  <span className="text-muted-foreground">{edu.period}</span>
-                </div>
-                <p className="text-muted-foreground">{edu.details}</p>
-              </div>
-            ))}
-          </div>
-        </AnimatedSection>
-
-        {/* Skills */}
-        <AnimatedSection delay={500}>
-          <h2 className="text-2xl font-bold mb-6 pb-2 border-b">Skills</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {skills.map((skillGroup, index) => (
-              <div key={index}>
-                <h3 className="text-lg font-semibold mb-3">{skillGroup.category}</h3>
-                <div className="flex flex-wrap gap-2">
-                  {skillGroup.items.map((skill, i) => (
-                    <span 
-                      key={i} 
-                      className="px-3 py-1 text-sm rounded-full bg-secondary/80 text-secondary-foreground"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </AnimatedSection>
-      </div>
+        </div>
+      </AnimatedSection>
     </div>
   );
 };
