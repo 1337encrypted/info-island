@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Menu, X, Youtube, Github, Instagram } from "lucide-react";
+import { Menu, X, YoutubeIcon, GithubIcon, InstagramIcon } from "lucide-react";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -75,7 +75,7 @@ const Navbar = () => {
             className="text-foreground/80 hover:text-primary transition-colors"
             aria-label="YouTube"
           >
-            <Youtube size={20} />
+            <YoutubeIcon size={20} fill="currentColor" />
           </a>
           <a 
             href="https://github.com" 
@@ -84,7 +84,7 @@ const Navbar = () => {
             className="text-foreground/80 hover:text-primary transition-colors"
             aria-label="GitHub"
           >
-            <Github size={20} />
+            <GithubIcon size={20} fill="currentColor" />
           </a>
           <a 
             href="https://instagram.com" 
@@ -93,7 +93,7 @@ const Navbar = () => {
             className="text-foreground/80 hover:text-primary transition-colors"
             aria-label="Instagram"
           >
-            <Instagram size={20} />
+            <InstagramIcon size={20} fill="currentColor" />
           </a>
         </div>
         
@@ -139,7 +139,7 @@ const Navbar = () => {
               className="text-foreground/80 hover:text-primary transition-colors"
               aria-label="YouTube"
             >
-              <Youtube size={24} />
+              <YoutubeIcon size={24} fill="currentColor" />
             </a>
             <a 
               href="https://github.com" 
@@ -148,7 +148,7 @@ const Navbar = () => {
               className="text-foreground/80 hover:text-primary transition-colors"
               aria-label="GitHub"
             >
-              <Github size={24} />
+              <GithubIcon size={24} fill="currentColor" />
             </a>
             <a 
               href="https://instagram.com" 
@@ -157,7 +157,7 @@ const Navbar = () => {
               className="text-foreground/80 hover:text-primary transition-colors"
               aria-label="Instagram"
             >
-              <Instagram size={24} />
+              <InstagramIcon size={24} fill="currentColor" />
             </a>
           </div>
         </div>
